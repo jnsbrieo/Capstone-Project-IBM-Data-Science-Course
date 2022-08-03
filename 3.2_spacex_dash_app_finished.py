@@ -9,7 +9,6 @@ spacex_df = pd.read_csv("spacex_launch_dash.csv")
 max_payload = spacex_df['Payload Mass (kg)'].max()
 min_payload = spacex_df['Payload Mass (kg)'].min()
 launch_sites = spacex_df['Launch Site'].unique()
-test = False # später wegmachen
 
 # Create a dash application
 app = Dash(__name__)
@@ -64,7 +63,7 @@ def get_pie_chart(entered_site):
             spacex_df,
             values='class', 
             names='Launch Site', 
-            title='Total Success Launches By Site'
+            title='Total Launches with successful booster landing By Site'
             )
     else:
         # return the outcomes piechart for a selected site
@@ -74,7 +73,7 @@ def get_pie_chart(entered_site):
             filtered_df,
             values=filtered_df.value_counts().values,
             names=['Success','Failure'],
-            title='Total Succes Launches for Site ' + entered_site
+            title='Proportion of Launches with successful booster landing from Launch Site ' + entered_site
             )
     return fig
 
@@ -91,7 +90,7 @@ def get_scatter(entered_site,slider_values):
             x='Payload Mass (kg)', 
             y='class',
             color="Booster Version Category",
-            title='Outcome (class=1 for Success, class=0 for Failure) of all Launches with Payload between {} gk and {} kg'.format(slider_values[0],slider_values[1])
+            title='Outcome (class=1 for successful booster landing, class=0 otherwise) of all Launches with Payload between {} kg and {} kg'.format(slider_values[0],slider_values[1])
             )
     else:
         # return the outcomes piechart for a selected site
@@ -102,10 +101,10 @@ def get_scatter(entered_site,slider_values):
             x='Payload Mass (kg)', 
             y='class',
             color="Booster Version Category",
-            title='Outcome (1 for Success, 0 for Failure) of all Launches from Site {} with Payload between {} kg and {} kg'.format(entered_site,slider_values[0],slider_values[1])
+            title='Outcome (class=1 for successful booster landing, class=0 otherwise) of all Launches from Site {} with Payload between {} kg and {} kg'.format(entered_site,slider_values[0],slider_values[1])
             )
     return fig
 
 # Run the app
-if (__name__ == '__main__') and (not test): # and (not test) später weg machen
+if (__name__ == '__main__'):
     app.run_server()
